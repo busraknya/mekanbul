@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    .row.page-header 
+        .col-lg-12 
+            h1 Starbucks 
+    .row 
+        .col-xs-12.col-md-12 
+            .row 
+                .col-xs-12.col-sm-6 
+                .col-xs-12.col-sm-6 
+                    .panel.panel-primary
+                        .panel-heading 
+                            h2.panel-title Konum Bilgisi 
+                        .panel-body
+                            -var enlem=37.78
+                            -var boylam=30.56
+                            img.img-responsive.img-rounder(src='http://maps.googleapis.com/maps/api/staticmap?center='+enlem+','+boylam+'&zoom=12&size=600x400&markers='+enlem+','+boylam+'&key=AIzaSyCmmKygTpBzHGOZEciJpAdxC9v_tWHagnE')
+    .row 
+        .col-xs-12 
+            .panel.panel-primary 
+                .panel-heading 
+                    a.btn.btn-default.pull-right(href='/mekan/yorum/yeni') Yorum Ekle
+                    h2.panel-title Müşteri Yorumları 
+                .panel-body.review-container 
+                    .row 
+                        .review 
+                            .well.well-sm.review-header
+                                span.raiting 
+                                span.glyphicon.glyphicon-star
+                                span.glyphicon.glyphicon-star
+                                span.glyphicon.glyphicon-star
+                                span.glyphicon.glyphicon-star
+                                span.glyphicon.glyphicon-star-empty
+                                span.review-author Büşra Konya
+                                small.reviewTimestamp &nbsp; 13 Ekim 2022
+                            .col-xs-12 
+                                p Güzel Mekan
+
+    
