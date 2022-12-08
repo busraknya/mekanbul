@@ -1,6 +1,6 @@
 $('#yorumEkle').submit(function (e) {
   $('.alert.alert-danger').hide();
-  if (!$('select#rating').val() ||
+  if (!$('input#name').val() ||
    !$('textarea#review').val()) {
     if ($('.alert.alert-danger').length) {
       $('.alert.alert-danger').show();

@@ -1,6 +1,6 @@
 const axios=require("axios");
 var apiSecenekleri={
-    // sunucu:"http://localhost:3000",
+    //sunucu:"http://localhost:3000",
     sunucu:"https://mekanbul.busraknya.repl.co",
     apiYolu:"/api/mekanlar/"
 }
@@ -31,7 +31,7 @@ var anaSayfaOlustur=function(res,mekanListesi){
         "baslik":"Anasayfa",
         "sayfaBaslik":{
             "siteAd":"Mekanbul",
-            "slogan":"Mekanları Keşfet"
+            "slogan":"Civardaki Mekanları Keşfet"
         },
         "mekanlar":mekanListesi,
         "mesaj":mesaj
@@ -70,6 +70,7 @@ var detaySayfasiOlustur=function(res,mekanDetaylari){
 
 var hataGoster = function(res,hata){
     var mesaj;
+    console.log(hata)
     if(hata.response.status==404){
         mesaj="404, Sayfa Bulunamadı";
     }else{
@@ -85,6 +86,7 @@ const mekanBilgisi=function(req,res){
    axios
     .get(apiSecenekleri.sunucu+apiSecenekleri.apiYolu+req.params.mekanid)
     .then(function(response){
+        req.session.mekanAdi=response.data.ad;
         detaySayfasiOlustur(res,response.data);
     })
     .catch(function(hata){
@@ -93,11 +95,43 @@ const mekanBilgisi=function(req,res){
 };
 
 const yorumEkle=function(req,res,next){
+    var mekanAdi=req.session.mekanAdi;
+    var mekanid=req.params.mekanid;
+    if(!mekanAdi){
+        res.redirect("/mekan/mekanid"+mekanid);
+    }else{
+        res.render("yorumekle",{baslik:mekanAdi+" mekanına yorum yap!",title:"Yorum Sayfası"});
+    }
     res.render('yorumekle',{title: 'Yorum Ekle'});
 }
+
+const yorumumuEkle=function(req,res){
+    var gonderilenYorum,mekanid;
+    mekanid=req.params.mekanid;
+    if(!req.body.adsoyad || !req.body.yorum){
+        res.redirect("/mekan/"+mekanid+"/yorum/yeni?hata=evet");
+    }
+    else{
+        gonderilenYorum={
+            yorumYapan:req.body.adsoyad,
+            yorumMetni:req.body.yorum,
+            puan:req.body.puan
+        }
+
+        axios
+        .post(apiSecenekleri.sunucu+apiSecenekleri.apiYolu+mekanid+"/yorumlar",gonderilenYorum)
+        .then(function(){
+            res.redirect("/mekan/"+mekanid);
+        })
+        .catch(function(hata){
+            hataGoster(req,res,hata);
+        });
+    }
+};
 
 module.exports={
     anaSayfa,
     mekanBilgisi,
-    yorumEkle
+    yorumEkle,
+    yorumumuEkle
 }
