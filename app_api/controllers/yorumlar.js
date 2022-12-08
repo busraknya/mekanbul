@@ -12,9 +12,9 @@ var sonPuanHesapla=function(gelenMekan){
         for(i=0;i<yorumSayisi;i++){
             toplamPuan=toplamPuan+gelenMekan.yorumlar[i].puan;
         }
-        ortalamaPuan=parseInt(toplamPuan/yorumSayisi,10); //10 luk tabanda ortalama puanı int olarak döndürür
+        ortalamaPuan=parseInt(toplamPuan/yorumSayisi,10); 
         gelenMekan.puan=ortalamaPuan;
-        gelenMekan.save(function(hata){ //veritabanına kayıt işlemi
+        gelenMekan.save(function(hata){ 
             if(hata){
                 console.log(hata);
             }
@@ -27,14 +27,14 @@ var ortalamaPuanGuncelle=function(mekanid){
         if(!hata){
             sonPuanHesapla(mekan);
         }
-    }); //Mekan.findById(mekanid). sorguyu hazırlar
+    }); 
 }
 var yorumOlustur=function(req,res,gelenMekan){
     if(!gelenMekan){
         cevapOlustur(res,404,{"mesaj":"mekanid bulunamadı",});
     }
     else{
-        gelenMekan.yorumlar.push({ //veritabanına pushlama
+        gelenMekan.yorumlar.push({ 
             yorumYapan:req.body.yorumYapan,
             puan:req.body.puan,
             yorumMetni:req.body.yorumMetni,
@@ -47,13 +47,13 @@ var yorumOlustur=function(req,res,gelenMekan){
             }else{
                 ortalamaPuanGuncelle(mekan._id);
                 yorum=mekan.yorumlar[mekan.yorumlar.length-1];
-                cevapOlustur(res,201,yorum); //post put vs de 201 kodu kullanılıyor
+                cevapOlustur(res,201,yorum); 
             }
         });
     }
 }
-//push denemesi
-const yorumEkle =(req,res) => {//request ve response alıyor
+
+const yorumEkle =(req,res) => {
    const mekanid=req.params.mekanid;
    if(mekanid){
     Mekan
@@ -71,7 +71,7 @@ const yorumEkle =(req,res) => {//request ve response alıyor
    }
 
 };
-const yorumSil = function(req,res){//request ve response alıyor
+const yorumSil = function(req,res){
     if(!req.params.mekanid || !req.params.yorumid) {
         cevapOlustur(res,404,{"mesaj":"Bulunamadı mekanid ve yorumid gerekli"});
         return;
@@ -102,7 +102,7 @@ const yorumSil = function(req,res){//request ve response alıyor
 })
 }
 
-const yorumGuncelle = function(req,res){//request ve response alıyor
+const yorumGuncelle = function(req,res){
    if(!req.params.mekanid || !req.params.yorumid){
     cevapOlustur(res,404,{"mesaj":"Bulunamdı. mekanid ve yorumid zorunlu."});
     return;
@@ -131,7 +131,7 @@ Mekan.findById(req.params.mekanid).select("yorumlar")
             }
     });
 };
-const yorumGetir = function(req,res){//request ve response alıyor
+const yorumGetir = function(req,res){
    if(req.params && req.params.mekanid && req.params.yorumid) {
     Mekan.findById(req.params.mekanid)
     .select("ad yorumlar")
@@ -180,4 +180,4 @@ module.exports={
     yorumGuncelle,
     yorumGetir
 }
-//test
+
